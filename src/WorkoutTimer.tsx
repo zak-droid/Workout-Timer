@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "./components/ui/dialog";
 
 type InitialState = {
   WORK_TIME: number;
