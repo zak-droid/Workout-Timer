@@ -45,6 +45,12 @@ const WorkoutTimer = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const CIRCLE_RADIUS = 120;
+  const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+  const progress = isWork
+    ? (currentTime / workTime) * CIRCLE_CIRCUMFERENCE
+    : (currentTime / restTime) * CIRCLE_CIRCUMFERENCE;
+
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
       {/* Session Timer */}
@@ -53,10 +59,38 @@ const WorkoutTimer = () => {
       </div>
 
       {/* Timer Display */}
-      <div className="flex flex-col justify-center items-center">
-        <div className="text-9xl font-bold mb-4">{currentTime}</div>
-        <div className="text-5xl font-semibold">
-          {isWork ? "WORK" : "REST"}
+      <div className="relative w-64 h-64">
+        <svg
+          className="absolute inset-0 transform -rotate-90"
+          width="100%"
+          height="100%"
+          viewBox="0 0 300 300"
+        >
+          <circle
+            cx="150"
+            cy="150"
+            r={CIRCLE_RADIUS}
+            stroke="#555"
+            strokeWidth="8"
+            fill="none"
+          />
+          <circle
+            cx="150"
+            cy="150"
+            r={CIRCLE_RADIUS}
+            stroke={isWork ? "green" : "red"}
+            strokeWidth="8"
+            fill="none"
+            strokeDasharray={CIRCLE_CIRCUMFERENCE}
+            strokeDashoffset={CIRCLE_CIRCUMFERENCE - progress}
+            style={{ transition: "stroke-dashoffset 1s linear" }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col justify-center items-center">
+          <div className="text-9xl font-bold mb-4">{currentTime}</div>
+          <div className="text-5xl font-semibold">
+            {isWork ? "WORK" : "REST"}
+          </div>
         </div>
       </div>
 
@@ -83,12 +117,12 @@ const WorkoutTimer = () => {
       </div>
 
       {/* Settings Dialog */}
-      <Dialog isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}>
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
         <div>
           <h2 className="text-2xl font-bold mb-4">Settings</h2>
           <div className="space-y-4">
             <div>
-              <label>Work Time:</label>
+              <label className="block mb-2">Work Time (seconds):</label>
               <input
                 type="number"
                 value={workTime}
@@ -97,7 +131,7 @@ const WorkoutTimer = () => {
               />
             </div>
             <div>
-              <label>Rest Time:</label>
+              <label className="block mb-2">Rest Time (seconds):</label>
               <input
                 type="number"
                 value={restTime}
