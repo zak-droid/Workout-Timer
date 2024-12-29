@@ -1,11 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import WorkoutTimer from "./WorkoutTimer";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
   <React.StrictMode>
-    <WorkoutTimer />
-  </React.StrictMode>,
-  document.getElementById("root")
+    <App />
+  </React.StrictMode>
 );
