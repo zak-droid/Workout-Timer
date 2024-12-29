@@ -24,7 +24,7 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose, workTi
                             id="workTime"
                             value={workTime}
                             onChange={(e) => setWorkTime(Number(e.target.value))}
-                            className="mt-1 p-2 border rounded w-full"
+                            className="mt-1 p-2 border rounded w-full text-black"
                         />
                     </div>
                     <div>
@@ -34,7 +34,7 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ isOpen, onClose, workTi
                             id="restTime"
                             value={restTime}
                             onChange={(e) => setRestTime(Number(e.target.value))}
-                            className="mt-1 p-2 border rounded w-full"
+                            className="mt-1 p-2 border rounded w-full text-black"
                         />
                     </div>
                     <div className="mt-6 flex justify-end">
