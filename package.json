@@ -1,20 +1,22 @@
 {
   "name": "workout-timer",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.0.0",
-    "lucide-react": "^0.268.0",
-    "@radix-ui/react-dialog": "^1.0.0",
-    "tailwindcss": "^3.3.2",
-    "postcss": "^8.4.21",
-    "autoprefixer": "^10.4.13"
+    "@radix-ui/react-dialog": "^1.0.5",
+    "lucide-react": "^0.294.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.3.2"
   },
-  "devDependencies": {  
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.0"
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.38",
+    "@types/react-dom": "^18.2.16",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,7 +25,10 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": ["react-app", "react-app/jest"]
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
