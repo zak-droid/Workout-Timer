@@ -13,8 +13,8 @@
     "postcss": "^8.4.21",
     "autoprefixer": "^10.4.13"
   },
-  "devDependencies": {  // This is the added section
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.0" // Or latest version
+  "devDependencies": {  
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.0"
   },
   "scripts": {
     "start": "react-scripts start",
