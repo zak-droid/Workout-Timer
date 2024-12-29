@@ -13,7 +13,7 @@ export const Dialog: React.FC<{
       onClick={() => onOpenChange(false)}
     >
       <div
-        className="bg-white p-6 rounded shadow-lg"
+        className="bg-white p-6 rounded shadow-lg w-80"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
