@@ -1,21 +1,19 @@
-import React from 'react';
+import React from "react";
 
-type DialogProps = {
+export const Dialog: React.FC<{
   open: boolean;
-  onClose: () => void;
+  onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
-};
-
-export const Dialog: React.FC<DialogProps> = ({ open, onClose, children }) => {
+}> = ({ open, onOpenChange, children }) => {
   if (!open) return null;
 
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-      onClick={onClose}
+      onClick={() => onOpenChange(false)}
     >
       <div
-        className="bg-white p-4 rounded shadow-lg w-96"
+        className="bg-white p-6 rounded shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
