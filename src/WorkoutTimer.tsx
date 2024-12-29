@@ -45,9 +45,13 @@ const WorkoutTimer = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handleSettingsClose = () => {
-    setIsSettingsOpen(false);
-  };
+  const calculateProgress = (current: number, max: number) =>
+    ((max - current) / max) * 100;
+
+  const CIRCLE_SIZE = 200;
+  const STROKE_WIDTH = 10;
+  const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
@@ -57,39 +61,39 @@ const WorkoutTimer = () => {
       </div>
 
       {/* Timer Display */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <svg
-            className="w-96 h-96 transform -rotate-90"
-            viewBox="0 0 100 100"
-          >
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              stroke="gray"
-              strokeWidth="2"
-              fill="none"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              stroke={isWork ? "green" : "red"}
-              strokeWidth="4"
-              fill="none"
-              strokeDasharray="282.6"
-              strokeDashoffset={
-                282.6 - (currentTime / (isWork ? workTime : restTime)) * 282.6
-              }
-            />
-          </svg>
-        </div>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-9xl font-bold">{currentTime}</div>
-          <div className="text-5xl font-semibold">
-            {isWork ? "WORK" : "REST"}
-          </div>
+      <div className="flex flex-col justify-center items-center relative">
+        <svg
+          className="absolute"
+          width={CIRCLE_SIZE}
+          height={CIRCLE_SIZE}
+          viewBox={`0 0 ${CIRCLE_SIZE} ${CIRCLE_SIZE}`}
+        >
+          <circle
+            cx={CIRCLE_SIZE / 2}
+            cy={CIRCLE_SIZE / 2}
+            r={RADIUS}
+            stroke="gray"
+            strokeWidth={STROKE_WIDTH}
+            fill="none"
+          />
+          <circle
+            cx={CIRCLE_SIZE / 2}
+            cy={CIRCLE_SIZE / 2}
+            r={RADIUS}
+            stroke={isWork ? "green" : "red"}
+            strokeWidth={STROKE_WIDTH}
+            fill="none"
+            strokeDasharray={CIRCUMFERENCE}
+            strokeDashoffset={
+              (CIRCUMFERENCE * (100 - calculateProgress(currentTime, workTime))) /
+              100
+            }
+            style={{ transition: "stroke-dashoffset 0.5s linear" }}
+          />
+        </svg>
+        <div className="text-9xl font-bold mb-4">{currentTime}</div>
+        <div className="text-5xl font-semibold">
+          {isWork ? "WORK" : "REST"}
         </div>
       </div>
 
@@ -116,7 +120,7 @@ const WorkoutTimer = () => {
       </div>
 
       {/* Settings Dialog */}
-      <Dialog open={isSettingsOpen} onOpenChange={handleSettingsClose}>
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Settings</DialogTitle>
