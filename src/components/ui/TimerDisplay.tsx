@@ -28,12 +28,12 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ currentTime, isWork, totalT
                     fill="none"
                     strokeDasharray="282.6"
                     strokeDashoffset={strokeDashoffset}
-                    className="transition-all duration-300 ease-linear" // Smooth transition
+                    className="transition-all duration-300 ease-linear"
                 />
             </svg>
             <div className="text-center">
-                <div className="text-5xl md:text-8xl font-bold">{formatTime(currentTime)}</div> {/* Formatted Time */}
-                <div className="text-2xl md:text-4xl font-semibold uppercase">{isWork ? "WORK" : "REST"}</div> {/* Uppercase */}
+                <div className="text-5xl md:text-8xl font-bold">{formatTime(currentTime)}</div>
+                <div className="text-2xl md:text-4xl font-semibold uppercase">{isWork ? "WORK" : "REST"}</div>
             </div>
         </div>
     );
