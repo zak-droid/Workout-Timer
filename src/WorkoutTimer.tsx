@@ -3,13 +3,15 @@ import { Play, Pause, RotateCcw, Settings } from "lucide-react";
 import TimerDisplay from "./components/ui/TimerDisplay";
 import SettingsDialog from "./components/ui/SettingsDialog";
 
-const WorkoutTimer = () => {
+const WorkoutTimer: React.FC = () => {
     const [workTime, setWorkTime] = useState(40);
     const [restTime, setRestTime] = useState(20);
     const [currentTime, setCurrentTime] = useState(40);
     const [isWork, setIsWork] = useState(true);
     const [isActive, setIsActive] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+    const totalSessionTime = (isActive ? (isWork ? currentTime : currentTime) : (isWork ? workTime : restTime))
 
     const toggleTimer = useCallback(() => {
         setIsActive((prev) => !prev);
@@ -27,9 +29,9 @@ const WorkoutTimer = () => {
         if (isActive) {
             interval = setInterval(() => {
                 setCurrentTime((prev) => {
-                    if (prev === 0) { // Changed condition to 0
+                    if (prev === 0) {
                         setIsWork((prevIsWork) => !prevIsWork);
-                        return prev ? restTime : workTime; // Correct order
+                        return prevIsWork ? restTime : workTime;
                     }
                     return prev - 1;
                 });
@@ -37,45 +39,26 @@ const WorkoutTimer = () => {
         }
 
         return () => clearInterval(interval);
-    }, [isActive, workTime, restTime]); // Removed isWork from dependency array
+    }, [isActive, workTime, restTime]);
 
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
-            <TimerDisplay
-                currentTime={currentTime}
-                isWork={isWork}
-                totalTime={isWork ? workTime : restTime}
-            />
+        <div className="min-h-screen flex flex-col items-center bg-black text-white p-8">
+            <h1 className="text-2xl font-bold mb-8">Total Session Time: {totalSessionTime}</h1>
+            <TimerDisplay currentTime={currentTime} isWork={isWork} totalTime={isWork ? workTime : restTime} />
 
-            <div className="fixed bottom-8 flex space-x-6">
-                <button
-                    onClick={toggleTimer}
-                    className="p-4 bg-green-600 rounded-full hover:bg-green-700"
-                >
+            <div className="mt-8 flex space-x-6">
+                <button onClick={toggleTimer} className="p-4 bg-green-600 rounded-full hover:bg-green-700">
                     {isActive ? <Pause size={32} /> : <Play size={32} />}
                 </button>
-                <button
-                    onClick={resetTimer}
-                    className="p-4 bg-red-600 rounded-full hover:bg-red-700"
-                >
+                <button onClick={resetTimer} className="p-4 bg-red-600 rounded-full hover:bg-red-700">
                     <RotateCcw size={32} />
                 </button>
-                <button
-                    onClick={() => setIsSettingsOpen(true)}
-                    className="p-4 bg-gray-600 rounded-full hover:bg-gray-700"
-                >
+                <button onClick={() => setIsSettingsOpen(true)} className="p-4 bg-gray-600 rounded-full hover:bg-gray-700">
                     <Settings size={32} />
                 </button>
             </div>
 
-            <SettingsDialog
-                isOpen={isSettingsOpen}
-                onClose={() => setIsSettingsOpen(false)}
-                workTime={workTime}
-                setWorkTime={setWorkTime}
-                restTime={restTime}
-                setRestTime={setRestTime}
-            />
+            <SettingsDialog isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} workTime={workTime} setWorkTime={setWorkTime} restTime={restTime} setRestTime={setRestTime} />
         </div>
     );
 };
