@@ -45,7 +45,7 @@ const WorkoutTimer = () => {
         totalTime={isWork ? workTime : restTime}
       />
 
-      <div className="fixed bottom-4 flex space-x-4">
+      <div className="fixed bottom-8 flex space-x-6">
         <button
           onClick={toggleTimer}
           className="p-4 bg-green-600 rounded-full hover:bg-green-700"
