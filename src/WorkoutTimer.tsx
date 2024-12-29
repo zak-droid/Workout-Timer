@@ -29,7 +29,7 @@ const WorkoutTimer = () => {
                 setCurrentTime((prev) => {
                     if (prev === 0) { // Changed condition to 0
                         setIsWork((prevIsWork) => !prevIsWork);
-                        return prevIsWork ? restTime : workTime; // Correct order
+                        return prev ? restTime : workTime; // Correct order
                     }
                     return prev - 1;
                 });
