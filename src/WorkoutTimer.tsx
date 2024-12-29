@@ -1,21 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, Settings } from 'lucide-react';
-import SettingsDialog from './ui/SettingsDialog';
-import TimerDisplay from './ui/TimerDisplay';
+import React, { useState, useEffect, useCallback } from "react";
+import { Play, Pause, RotateCcw, Settings } from "lucide-react";
+import TimerDisplay from "./components/ui/TimerDisplay";
+import SettingsDialog from "./components/ui/SettingsDialog";
 
-const WorkoutTimer: React.FC = () => {
+const WorkoutTimer = () => {
   const [workTime, setWorkTime] = useState(40);
   const [restTime, setRestTime] = useState(20);
-  const [currentTime, setCurrentTime] = useState(workTime);
+  const [currentTime, setCurrentTime] = useState(40);
   const [isWork, setIsWork] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const toggleTimer = useCallback(() => {
+    setIsActive((prev) => !prev);
+  }, []);
+
+  const resetTimer = useCallback(() => {
+    setIsActive(false);
+    setCurrentTime(workTime);
+    setIsWork(true);
+  }, [workTime]);
 
   useEffect(() => {
     if (isActive) {
       const interval = setInterval(() => {
         setCurrentTime((prev) => {
-          if (prev === 0) {
+          if (prev === 1) {
             setIsWork((prevIsWork) => !prevIsWork);
             return isWork ? restTime : workTime;
           }
@@ -27,23 +37,17 @@ const WorkoutTimer: React.FC = () => {
     }
   }, [isActive, isWork, workTime, restTime]);
 
-  const resetTimer = () => {
-    setIsActive(false);
-    setCurrentTime(workTime);
-    setIsWork(true);
-  };
-
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
       <TimerDisplay
         currentTime={currentTime}
         isWork={isWork}
-        workColor="#00FF00"
-        restColor="#FF0000"
+        totalTime={isWork ? workTime : restTime}
       />
+
       <div className="fixed bottom-4 flex space-x-4">
         <button
-          onClick={() => setIsActive((prev) => !prev)}
+          onClick={toggleTimer}
           className="p-4 bg-green-600 rounded-full hover:bg-green-700"
         >
           {isActive ? <Pause size={32} /> : <Play size={32} />}
@@ -61,12 +65,13 @@ const WorkoutTimer: React.FC = () => {
           <Settings size={32} />
         </button>
       </div>
+
       <SettingsDialog
-        open={isSettingsOpen}
+        isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
         workTime={workTime}
-        restTime={restTime}
         setWorkTime={setWorkTime}
+        restTime={restTime}
         setRestTime={setRestTime}
       />
     </div>
