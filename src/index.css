@@ -1,12 +1,11 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import WorkoutTimer from "./WorkoutTimer";
 
-.min-h-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  color: white;
-}
+ReactDOM.render(
+  <React.StrictMode>
+    <WorkoutTimer />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
