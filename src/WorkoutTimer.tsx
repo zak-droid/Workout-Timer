@@ -1,23 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Play, Pause, RotateCcw, Settings } from "lucide-react";
-
-const Dialog = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white text-black rounded-lg p-6 w-96 relative">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-black hover:text-red-600"
-        >
-          ✖
-        </button>
-        {children}
-      </div>
-    </div>
-  );
-};
+import { Dialog } from "@/components/ui/dialog";
 
 const WorkoutTimer = () => {
   const [workTime, setWorkTime] = useState(40);
@@ -26,7 +9,6 @@ const WorkoutTimer = () => {
   const [isWork, setIsWork] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [prepTime, setPrepTime] = useState(3);
   const [sessionTime, setSessionTime] = useState(0);
 
   const toggleTimer = useCallback(() => {
@@ -57,20 +39,20 @@ const WorkoutTimer = () => {
     }
   }, [isActive, isWork, workTime, restTime]);
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col justify-center items-center bg-black text-white"
-    >
+    <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
+      {/* Session Timer */}
       <div className="absolute top-4 text-2xl font-mono">
         {formatTime(sessionTime)} / {formatTime(workTime + restTime)}
       </div>
 
+      {/* Timer Display */}
       <div className="flex flex-col justify-center items-center">
         <div className="text-9xl font-bold mb-4">{currentTime}</div>
         <div className="text-5xl font-semibold">
@@ -78,6 +60,7 @@ const WorkoutTimer = () => {
         </div>
       </div>
 
+      {/* Controls */}
       <div className="fixed bottom-4 flex space-x-4">
         <button
           onClick={toggleTimer}
@@ -99,35 +82,29 @@ const WorkoutTimer = () => {
         </button>
       </div>
 
+      {/* Settings Dialog */}
       <Dialog isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}>
-        <h2 className="text-2xl font-bold mb-4">Settings</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Work Time (seconds):</label>
-            <input
-              type="number"
-              value={workTime}
-              onChange={(e) => setWorkTime(Number(e.target.value))}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Rest Time (seconds):</label>
-            <input
-              type="number"
-              value={restTime}
-              onChange={(e) => setRestTime(Number(e.target.value))}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Preparation Time (seconds):</label>
-            <input
-              type="number"
-              value={prepTime}
-              onChange={(e) => setPrepTime(Number(e.target.value))}
-              className="w-full p-2 border rounded"
-            />
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Settings</h2>
+          <div className="space-y-4">
+            <div>
+              <label>Work Time:</label>
+              <input
+                type="number"
+                value={workTime}
+                onChange={(e) => setWorkTime(Number(e.target.value))}
+                className="p-2 border rounded w-full"
+              />
+            </div>
+            <div>
+              <label>Rest Time:</label>
+              <input
+                type="number"
+                value={restTime}
+                onChange={(e) => setRestTime(Number(e.target.value))}
+                className="p-2 border rounded w-full"
+              />
+            </div>
           </div>
         </div>
       </Dialog>
