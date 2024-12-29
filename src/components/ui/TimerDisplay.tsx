@@ -1,57 +1,37 @@
-import React from 'react';
+import React from "react";
 
-type TimerDisplayProps = {
+const TimerDisplay: React.FC<{
   currentTime: number;
   isWork: boolean;
-  workColor: string;
-  restColor: string;
-};
+  totalTime: number;
+}> = ({ currentTime, isWork, totalTime }) => {
+  const percentage = ((totalTime - currentTime) / totalTime) * 100;
 
-const TimerDisplay: React.FC<TimerDisplayProps> = ({
-  currentTime,
-  isWork,
-  workColor,
-  restColor,
-}) => {
-  const circleRadius = 90;
-  const strokeWidth = 10;
-  const circleCircumference = 2 * Math.PI * circleRadius;
-
-  const progress = (currentTime / 40) * 100;
-  const strokeDashoffset =
-    circleCircumference - (progress / 100) * circleCircumference;
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
 
   return (
-    <div className="relative">
-      <svg
-        className="w-60 h-60 transform -rotate-90"
-        viewBox={`0 0 ${circleRadius * 2 + strokeWidth} ${
-          circleRadius * 2 + strokeWidth
-        }`}
-      >
+    <div className="relative flex justify-center items-center">
+      <svg className="absolute w-48 h-48">
         <circle
-          cx={circleRadius + strokeWidth / 2}
-          cy={circleRadius + strokeWidth / 2}
-          r={circleRadius}
-          strokeWidth={strokeWidth}
-          stroke="#333"
+          cx="50%"
+          cy="50%"
+          r="45%"
+          stroke={isWork ? "green" : "red"}
+          strokeWidth="8"
           fill="none"
-        />
-        <circle
-          cx={circleRadius + strokeWidth / 2}
-          cy={circleRadius + strokeWidth / 2}
-          r={circleRadius}
-          strokeWidth={strokeWidth}
-          stroke={isWork ? workColor : restColor}
-          fill="none"
-          strokeDasharray={circleCircumference}
-          strokeDashoffset={strokeDashoffset}
-          style={{ transition: 'stroke-dashoffset 0.5s linear' }}
+          strokeDasharray="282.6"
+          strokeDashoffset={282.6 - (282.6 * percentage) / 100}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
-        <div className="text-6xl font-bold">{currentTime}</div>
-        <div className="text-2xl">{isWork ? 'WORK' : 'REST'}</div>
+      <div className="text-center">
+        <div className="text-8xl font-bold">{currentTime}</div>
+        <div className="text-4xl font-semibold">
+          {isWork ? "WORK" : "REST"}
+        </div>
       </div>
     </div>
   );
