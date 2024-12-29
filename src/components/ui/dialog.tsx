@@ -1,25 +1,37 @@
-import React from "react";
+import React from 'react';
 
 type DialogProps = {
-  isOpen: boolean;
-  onClose: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
 };
 
-export const Dialog: React.FC<DialogProps> = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+export const Dialog: React.FC<DialogProps> = ({ open, onOpenChange, children }) => {
+  if (!open) return null;
 
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-      onClick={onClose}
+      onClick={() => onOpenChange(false)}
     >
       <div
-        className="bg-white p-6 rounded shadow-lg"
-        onClick={(e) => e.stopPropagation()} // Prevents closing the dialog when clicking inside it
+        className="bg-white p-4 rounded shadow-lg"
+        onClick={(e) => e.stopPropagation()}
       >
         {children}
       </div>
     </div>
   );
 };
+
+export const DialogContent: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="p-4">{children}</div>
+);
+
+export const DialogHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="text-lg font-bold mb-4">{children}</div>
+);
+
+export const DialogTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <h2 className="text-xl">{children}</h2>
+);
