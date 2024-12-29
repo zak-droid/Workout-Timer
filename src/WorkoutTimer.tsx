@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Play, Pause, RotateCcw, Settings } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
+import TimerDisplay from "./components/TimerDisplay";
+import SettingsDialog from "./components/SettingsDialog";
 
 const WorkoutTimer = () => {
   const [workTime, setWorkTime] = useState(40);
@@ -45,59 +46,19 @@ const WorkoutTimer = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const calculateProgress = (current: number, max: number) =>
-    ((max - current) / max) * 100;
-
-  const CIRCLE_SIZE = 200;
-  const STROKE_WIDTH = 10;
-  const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
-  const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
-      {/* Session Timer */}
+    <div className="flex flex-col justify-center items-center">
       <div className="absolute top-4 text-2xl font-mono">
         {formatTime(sessionTime)} / {formatTime(workTime + restTime)}
       </div>
 
-      {/* Timer Display */}
-      <div className="flex flex-col justify-center items-center relative">
-        <svg
-          className="absolute"
-          width={CIRCLE_SIZE}
-          height={CIRCLE_SIZE}
-          viewBox={`0 0 ${CIRCLE_SIZE} ${CIRCLE_SIZE}`}
-        >
-          <circle
-            cx={CIRCLE_SIZE / 2}
-            cy={CIRCLE_SIZE / 2}
-            r={RADIUS}
-            stroke="gray"
-            strokeWidth={STROKE_WIDTH}
-            fill="none"
-          />
-          <circle
-            cx={CIRCLE_SIZE / 2}
-            cy={CIRCLE_SIZE / 2}
-            r={RADIUS}
-            stroke={isWork ? "green" : "red"}
-            strokeWidth={STROKE_WIDTH}
-            fill="none"
-            strokeDasharray={CIRCUMFERENCE}
-            strokeDashoffset={
-              (CIRCUMFERENCE * (100 - calculateProgress(currentTime, workTime))) /
-              100
-            }
-            style={{ transition: "stroke-dashoffset 0.5s linear" }}
-          />
-        </svg>
-        <div className="text-9xl font-bold mb-4">{currentTime}</div>
-        <div className="text-5xl font-semibold">
-          {isWork ? "WORK" : "REST"}
-        </div>
-      </div>
+      <TimerDisplay
+        currentTime={currentTime}
+        isWork={isWork}
+        workColor="green"
+        restColor="red"
+      />
 
-      {/* Controls */}
       <div className="fixed bottom-4 flex space-x-4">
         <button
           onClick={toggleTimer}
@@ -119,34 +80,14 @@ const WorkoutTimer = () => {
         </button>
       </div>
 
-      {/* Settings Dialog */}
-      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Settings</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label>Work Time (seconds):</label>
-              <input
-                type="number"
-                value={workTime}
-                onChange={(e) => setWorkTime(Number(e.target.value))}
-                className="p-2 border rounded w-full"
-              />
-            </div>
-            <div>
-              <label>Rest Time (seconds):</label>
-              <input
-                type="number"
-                value={restTime}
-                onChange={(e) => setRestTime(Number(e.target.value))}
-                className="p-2 border rounded w-full"
-              />
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SettingsDialog
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        workTime={workTime}
+        restTime={restTime}
+        setWorkTime={setWorkTime}
+        setRestTime={setRestTime}
+      />
     </div>
   );
 };
