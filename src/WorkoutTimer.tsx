@@ -1,10 +1,23 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Play, Pause, RotateCcw, Settings } from "lucide-react";
 
-const CIRCLE_SIZE = 384; // SVG size
-const CIRCLE_RADIUS = 186; // Circle radius
-const STROKE_WIDTH = 8; // Stroke width
-const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS; // Circle circumference
+const Dialog = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white text-black rounded-lg p-6 w-96 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-black hover:text-red-600"
+        >
+          ✖
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const WorkoutTimer = () => {
   const [workTime, setWorkTime] = useState(40);
@@ -12,7 +25,7 @@ const WorkoutTimer = () => {
   const [currentTime, setCurrentTime] = useState(40);
   const [isWork, setIsWork] = useState(true);
   const [isActive, setIsActive] = useState(false);
-  const [isPreparing, setIsPreparing] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [prepTime, setPrepTime] = useState(3);
   const [sessionTime, setSessionTime] = useState(0);
 
@@ -50,61 +63,21 @@ const WorkoutTimer = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const calculateProgress = (current, max) => {
-    return ((max - current) / max) * 100;
-  };
-
   return (
     <div
       className="min-h-screen flex flex-col justify-center items-center bg-black text-white"
     >
-      {/* Session Timer */}
       <div className="absolute top-4 text-2xl font-mono">
         {formatTime(sessionTime)} / {formatTime(workTime + restTime)}
       </div>
 
-      {/* Timer Display with Circular Progress */}
-      <div className="relative w-96 h-96">
-        {/* Circular Background */}
-        <div
-          className="absolute inset-0 rounded-full border-8"
-          style={{ borderColor: isWork ? "#00FF00" : "#FF0000" }}
-        ></div>
-        {/* Circular Progress Bar */}
-        <svg
-          className="absolute w-full h-full transform -rotate-90"
-          viewBox={`0 0 ${CIRCLE_SIZE} ${CIRCLE_SIZE}`}
-        >
-          <circle
-            cx={CIRCLE_SIZE / 2}
-            cy={CIRCLE_SIZE / 2}
-            r={CIRCLE_RADIUS}
-            strokeWidth={STROKE_WIDTH}
-            stroke={isWork ? "#00FF00" : "#FF0000"}
-            fill="none"
-            strokeDasharray={CIRCLE_CIRCUMFERENCE}
-            strokeDashoffset={`${
-              (CIRCLE_CIRCUMFERENCE *
-                (100 -
-                  calculateProgress(
-                    currentTime,
-                    isWork ? workTime : restTime
-                  ))) /
-              100
-            }`}
-            style={{ transition: "stroke-dashoffset 1s linear" }}
-          />
-        </svg>
-        {/* Timer Value */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-9xl font-bold">{currentTime}</div>
-          <div className="text-5xl font-semibold">
-            {isPreparing ? "PREP" : isWork ? "WORK" : "REST"}
-          </div>
+      <div className="flex flex-col justify-center items-center">
+        <div className="text-9xl font-bold mb-4">{currentTime}</div>
+        <div className="text-5xl font-semibold">
+          {isWork ? "WORK" : "REST"}
         </div>
       </div>
 
-      {/* Controls */}
       <div className="fixed bottom-4 flex space-x-4">
         <button
           onClick={toggleTimer}
@@ -119,11 +92,45 @@ const WorkoutTimer = () => {
           <RotateCcw size={32} />
         </button>
         <button
+          onClick={() => setIsSettingsOpen(true)}
           className="p-4 bg-gray-600 rounded-full hover:bg-gray-700"
         >
           <Settings size={32} />
         </button>
       </div>
+
+      <Dialog isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}>
+        <h2 className="text-2xl font-bold mb-4">Settings</h2>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">Work Time (seconds):</label>
+            <input
+              type="number"
+              value={workTime}
+              onChange={(e) => setWorkTime(Number(e.target.value))}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Rest Time (seconds):</label>
+            <input
+              type="number"
+              value={restTime}
+              onChange={(e) => setRestTime(Number(e.target.value))}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Preparation Time (seconds):</label>
+            <input
+              type="number"
+              value={prepTime}
+              onChange={(e) => setPrepTime(Number(e.target.value))}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };
