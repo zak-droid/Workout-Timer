@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Play, Pause, RotateCcw, Settings } from "lucide-react";
-import { Dialog } from "./components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
 
 const WorkoutTimer = () => {
   const [workTime, setWorkTime] = useState(40);
@@ -45,11 +45,9 @@ const WorkoutTimer = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const CIRCLE_RADIUS = 120;
-  const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
-  const progress = isWork
-    ? (currentTime / workTime) * CIRCLE_CIRCUMFERENCE
-    : (currentTime / restTime) * CIRCLE_CIRCUMFERENCE;
+  const handleSettingsClose = () => {
+    setIsSettingsOpen(false);
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
@@ -59,35 +57,36 @@ const WorkoutTimer = () => {
       </div>
 
       {/* Timer Display */}
-      <div className="relative w-64 h-64">
-        <svg
-          className="absolute inset-0 transform -rotate-90"
-          width="100%"
-          height="100%"
-          viewBox="0 0 300 300"
-        >
-          <circle
-            cx="150"
-            cy="150"
-            r={CIRCLE_RADIUS}
-            stroke="#555"
-            strokeWidth="8"
-            fill="none"
-          />
-          <circle
-            cx="150"
-            cy="150"
-            r={CIRCLE_RADIUS}
-            stroke={isWork ? "green" : "red"}
-            strokeWidth="8"
-            fill="none"
-            strokeDasharray={CIRCLE_CIRCUMFERENCE}
-            strokeDashoffset={CIRCLE_CIRCUMFERENCE - progress}
-            style={{ transition: "stroke-dashoffset 1s linear" }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col justify-center items-center">
-          <div className="text-9xl font-bold mb-4">{currentTime}</div>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg
+            className="w-96 h-96 transform -rotate-90"
+            viewBox="0 0 100 100"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              stroke="gray"
+              strokeWidth="2"
+              fill="none"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              stroke={isWork ? "green" : "red"}
+              strokeWidth="4"
+              fill="none"
+              strokeDasharray="282.6"
+              strokeDashoffset={
+                282.6 - (currentTime / (isWork ? workTime : restTime)) * 282.6
+              }
+            />
+          </svg>
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="text-9xl font-bold">{currentTime}</div>
           <div className="text-5xl font-semibold">
             {isWork ? "WORK" : "REST"}
           </div>
@@ -117,12 +116,14 @@ const WorkoutTimer = () => {
       </div>
 
       {/* Settings Dialog */}
-      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Settings</h2>
+      <Dialog open={isSettingsOpen} onOpenChange={handleSettingsClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+          </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="block mb-2">Work Time (seconds):</label>
+              <label>Work Time (seconds):</label>
               <input
                 type="number"
                 value={workTime}
@@ -131,7 +132,7 @@ const WorkoutTimer = () => {
               />
             </div>
             <div>
-              <label className="block mb-2">Rest Time (seconds):</label>
+              <label>Rest Time (seconds):</label>
               <input
                 type="number"
                 value={restTime}
@@ -140,7 +141,7 @@ const WorkoutTimer = () => {
               />
             </div>
           </div>
-        </div>
+        </DialogContent>
       </Dialog>
     </div>
   );
