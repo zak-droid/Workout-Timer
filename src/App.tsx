@@ -1,12 +1,12 @@
-import React from "react";
-import WorkoutTimer from "./WorkoutTimer";
+import React from 'react';
+import WorkoutTimer from './WorkoutTimer';
 
-const App = () => {
+function App() {
   return (
-    <div className="min-h-screen bg-black text-white flex justify-center items-center">
+    <div className="bg-black min-h-screen">
       <WorkoutTimer />
     </div>
   );
-};
+}
 
 export default App;
