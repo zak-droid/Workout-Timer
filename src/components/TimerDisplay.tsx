@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type TimerDisplayProps = {
   currentTime: number;
@@ -13,30 +13,45 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({
   workColor,
   restColor,
 }) => {
-  const CIRCLE_SIZE = 200;
-  const CIRCLE_RADIUS = 90;
-  const STROKE_WIDTH = 8;
-  const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
+  const circleRadius = 90;
+  const strokeWidth = 10;
+  const circleCircumference = 2 * Math.PI * circleRadius;
+
+  const progress = (currentTime / 40) * 100;
+  const strokeDashoffset =
+    circleCircumference - (progress / 100) * circleCircumference;
 
   return (
-    <div className="relative w-52 h-52">
-      <svg className="w-full h-full -rotate-90">
+    <div className="relative">
+      <svg
+        className="w-60 h-60 transform -rotate-90"
+        viewBox={`0 0 ${circleRadius * 2 + strokeWidth} ${
+          circleRadius * 2 + strokeWidth
+        }`}
+      >
         <circle
-          cx={CIRCLE_SIZE / 2}
-          cy={CIRCLE_SIZE / 2}
-          r={CIRCLE_RADIUS}
-          stroke={isWork ? workColor : restColor}
-          strokeWidth={STROKE_WIDTH}
+          cx={circleRadius + strokeWidth / 2}
+          cy={circleRadius + strokeWidth / 2}
+          r={circleRadius}
+          strokeWidth={strokeWidth}
+          stroke="#333"
           fill="none"
-          strokeDasharray={CIRCUMFERENCE}
-          strokeDashoffset={
-            (CIRCUMFERENCE * (40 - currentTime)) / 40 // Adjust dynamically
-          }
+        />
+        <circle
+          cx={circleRadius + strokeWidth / 2}
+          cy={circleRadius + strokeWidth / 2}
+          r={circleRadius}
+          strokeWidth={strokeWidth}
+          stroke={isWork ? workColor : restColor}
+          fill="none"
+          strokeDasharray={circleCircumference}
+          strokeDashoffset={strokeDashoffset}
+          style={{ transition: 'stroke-dashoffset 0.5s linear' }}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col justify-center items-center">
-        <div className="text-7xl font-bold">{currentTime}</div>
-        <div className="text-xl">{isWork ? "WORK" : "REST"}</div>
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
+        <div className="text-6xl font-bold">{currentTime}</div>
+        <div className="text-2xl">{isWork ? 'WORK' : 'REST'}</div>
       </div>
     </div>
   );
