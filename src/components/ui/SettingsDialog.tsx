@@ -1,43 +1,37 @@
-import React from 'react';
+import React from "react";
+import { Dialog } from "./dialog";
 
-type SettingsDialogProps = {
-  open: boolean;
+const SettingsDialog: React.FC<{
+  isOpen: boolean;
   onClose: () => void;
   workTime: number;
-  restTime: number;
   setWorkTime: (time: number) => void;
+  restTime: number;
   setRestTime: (time: number) => void;
-};
-
-const SettingsDialog: React.FC<SettingsDialogProps> = ({
-  open,
-  onClose,
-  workTime,
-  restTime,
-  setWorkTime,
-  setRestTime,
-}) => {
+}> = ({ isOpen, onClose, workTime, setWorkTime, restTime, setRestTime }) => {
   return (
-    <Dialog open={open} onClose={onClose}>
-      <h2 className="text-xl font-bold mb-4">Settings</h2>
-      <div className="space-y-4">
-        <div>
-          <label className="block mb-2">Work Time (seconds):</label>
-          <input
-            type="number"
-            value={workTime}
-            onChange={(e) => setWorkTime(Number(e.target.value))}
-            className="p-2 border rounded w-full"
-          />
-        </div>
-        <div>
-          <label className="block mb-2">Rest Time (seconds):</label>
-          <input
-            type="number"
-            value={restTime}
-            onChange={(e) => setRestTime(Number(e.target.value))}
-            className="p-2 border rounded w-full"
-          />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <div className="p-4">
+        <h2 className="text-2xl font-bold mb-4">Settings</h2>
+        <div className="space-y-4">
+          <div>
+            <label>Work Time:</label>
+            <input
+              type="number"
+              value={workTime}
+              onChange={(e) => setWorkTime(Number(e.target.value))}
+              className="p-2 border rounded w-full"
+            />
+          </div>
+          <div>
+            <label>Rest Time:</label>
+            <input
+              type="number"
+              value={restTime}
+              onChange={(e) => setRestTime(Number(e.target.value))}
+              className="p-2 border rounded w-full"
+            />
+          </div>
         </div>
       </div>
     </Dialog>
