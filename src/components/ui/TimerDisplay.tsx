@@ -14,8 +14,8 @@ const TimerDisplay: React.FC<{
   };
 
   return (
-    <div className="relative flex justify-center items-center">
-      <svg className="absolute w-48 h-48">
+    <div className="relative w-64 h-64 flex items-center justify-center">
+      <svg className="absolute w-full h-full">
         <circle
           cx="50%"
           cy="50%"
