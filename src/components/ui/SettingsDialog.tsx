@@ -11,11 +11,11 @@ const SettingsDialog: React.FC<{
 }> = ({ isOpen, onClose, workTime, setWorkTime, restTime, setRestTime }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <div className="p-4">
+      <div className="p-6">
         <h2 className="text-2xl font-bold mb-4">Settings</h2>
         <div className="space-y-4">
           <div>
-            <label>Work Time:</label>
+            <label>Work Time (seconds):</label>
             <input
               type="number"
               value={workTime}
@@ -24,7 +24,7 @@ const SettingsDialog: React.FC<{
             />
           </div>
           <div>
-            <label>Rest Time:</label>
+            <label>Rest Time (seconds):</label>
             <input
               type="number"
               value={restTime}
