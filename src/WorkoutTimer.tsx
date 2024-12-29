@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Play, Pause, RotateCcw, Settings } from "lucide-react";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog } from "./components/ui/dialog";
 
 const WorkoutTimer = () => {
   const [workTime, setWorkTime] = useState(40);
