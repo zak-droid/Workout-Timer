@@ -11,7 +11,13 @@ const WorkoutTimer: React.FC = () => {
     const [isActive, setIsActive] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-    const totalSessionTime = (isActive ? (isWork ? currentTime : currentTime) : (isWork ? workTime : restTime))
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, "0")}`;
+    };
+
+    const totalSessionTime = formatTime(isActive ? (isWork ? currentTime : currentTime) : (isWork ? workTime : restTime))
 
     const toggleTimer = useCallback(() => {
         setIsActive((prev) => !prev);
